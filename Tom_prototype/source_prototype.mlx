@@ -1,0 +1,123 @@
+function epidemic_simulation_SIRS(gridSize, nAgents, infectionDuration, immunityDuration, p0, nSteps, videoFile)
+    % Initialize positions and states
+    agentPositions = ceil(rand(nAgents, 2) * gridSize);
+    agentStates = zeros(nAgents, 1); % 0 = Susceptible, 1 = Infected, 2 = Recovered
+    agentInfectionTime = zeros(nAgents, 1); % Track infection duration
+    agentImmunityTime = zeros(nAgents, 1); % Track immunity duration
+    
+    % Initialize some agents as infected
+    initiallyInfected = randperm(nAgents, 5);
+    agentStates(initiallyInfected) = 1;
+    agentInfectionTime(initiallyInfected) = infectionDuration;
+    
+    % Set up video writer
+    writer = VideoWriter(videoFile);
+    open(writer);
+    
+    % Initialize arrays to track counts
+    susceptible_counts = zeros(nSteps, 1);
+    infected_counts = zeros(nSteps, 1);
+    recovered_counts = zeros(nSteps, 1); % Current number of recovered individuals
+    
+    % Create a figure for the real-time plot
+    figure('Position', [100, 100, 1200, 600]);
+    
+    % Subplot for the grid
+    subplot(1, 2, 1);
+    hold on;
+    axis([1 gridSize 1 gridSize]);
+    grid on;
+    set(gca, 'xtick', 0:5:gridSize, 'ytick', 0:5:gridSize);
+    axis equal;
+    title('Epidemic Simulation');
+    
+    % Subplot for the counts
+    subplot(1, 2, 2);
+    hold on;
+    susceptible_plot = plot(1:nSteps, susceptible_counts, 'g', 'LineWidth', 2);
+    infected_plot = plot(1:nSteps, infected_counts, 'r', 'LineWidth', 2);
+    recovered_plot = plot(1:nSteps, recovered_counts, 'b', 'LineWidth', 2);
+    xlabel('Time Step');
+    ylabel('Number of Agents');
+    legend('Susceptible', 'Infected', 'Recovered');
+    title('Epidemic Curve');
+    hold off;
+    
+    % Start timing the simulation
+    tic;
+    
+    % Simulation loop
+    for step = 1:nSteps
+        % Update infection time and states using logical indexing
+        infected_agents = (agentStates == 1);
+        agentInfectionTime(infected_agents) = agentInfectionTime(infected_agents) - 1;
+        recovered_agents = (agentInfectionTime == 0) & infected_agents;
+        
+        % Update states of recovered agents to recovered
+        agentStates(recovered_agents) = 2;
+        agentImmunityTime(recovered_agents) = immunityDuration;
+        
+        % Update immunity time and states for recovered agents
+        recovered_agents = (agentStates == 2);
+        agentImmunityTime(recovered_agents) = agentImmunityTime(recovered_agents) - 1;
+        susceptible_agents = (agentImmunityTime == 0) & recovered_agents;
+        agentStates(susceptible_agents) = 0; % Return to susceptible state
+        
+        % Random walk: move agents to new positions
+        agentPositions = agentPositions + randi([-3, 3], nAgents, 2);
+        agentPositions = max(min(agentPositions, gridSize), 1); % Keep within bounds
+        
+        % Infection process vectorized
+        susceptible_agents = find(agentStates == 0); % Only check susceptible agents
+        for i = susceptible_agents'
+            distances = sqrt(sum((agentPositions - agentPositions(i, :)).^2, 2));
+            nearby_infected = sum((distances > 0 & distances <= 4) & infected_agents);
+            
+            % Probability of spreading infection
+            if nearby_infected > 0
+                infectionProbability = 1 - (1 - p0)^nearby_infected;
+                % Infect
+                if rand <= infectionProbability
+                    agentStates(i) = 1;
+                    agentInfectionTime(i) = infectionDuration;
+                end
+            end
+        end
+        
+        % Plotting
+        subplot(1, 2, 1);
+        cla;
+        hold on;
+        plot(agentPositions(agentStates == 0, 1), agentPositions(agentStates == 0, 2), 'go'); % Susceptible: Green
+        plot(agentPositions(agentStates == 1, 1), agentPositions(agentStates == 1, 2), 'ro'); % Infected: Red
+        plot(agentPositions(agentStates == 2, 1), agentPositions(agentStates == 2, 2), 'bo'); % Recovered: Blue
+        hold off;
+        title(sprintf('Step %d', step));
+        
+        % Update counts
+        susceptible_counts(step) = sum(agentStates == 0);
+        infected_counts(step) = sum(agentStates == 1);
+        recovered_counts(step) = sum(agentStates == 2);
+        
+        % Update the real-time plot
+        subplot(1, 2, 2);
+        set(susceptible_plot, 'YData', susceptible_counts);
+        set(infected_plot, 'YData', infected_counts);
+        set(recovered_plot, 'YData', recovered_counts);
+        drawnow;
+        
+        % Capture frame for video
+        frame = getframe(gcf);
+        writeVideo(writer, frame);
+    end
+    
+    % End timing the simulation
+    elapsedTime = toc;
+    
+    close(writer); % Finalize the video file
+    disp(['Video saved as ' videoFile]);
+    disp(['Total simulation time: ' num2str(elapsedTime) ' seconds']);
+end
+
+epidemic_simulation_SIRS(100, 100, 70, 30, 0.3, 1000, 'epidemicSimulationImprove.avi');
+
