@@ -1,7 +1,7 @@
 # Modify Tracker
 ## Tracking what i change on the local machine for everyone
 ### List:
-* change the probability of infection to $1 - (1 - p)^x$ where p is the infection probability and x is the number of infection patient aroudn them. This would simplify the if statement to 2 case instead of multiple 
+* change the probability of infection to $1 - (1 - p)^x$ where p is the infection probability and x is the number of infection patient around them. This would simplify the if statement to 2 case instead of multiple 
 * added a real-time graph update
 * added immunity period
 * changing the moore neighborhood to euclidean distance(questionable change really) I thought it would bring more performance and less complicated but also mirror the real world more
