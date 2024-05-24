@@ -18,10 +18,11 @@
   - [ ] See how the infection radius is going to work with variation in value (having overlaying infection radius affecting the probability)
   - [ ] Compare it with expected scenario ?
 ### 3. Improving Immunity/Recovery State
-- **Description**: The immunity is still complete immunity for set number of days instead of probability based immunity
-- **Status**:Open
+- **Description**: ~~The immunity is still complete immunity for set number of days instead of probability based immunity~~ Basically, recovered agents now have a 'resistance' to reinfection. Their probability of reinfection decreases with time, and decreases by 0.75 every time infected again (initally has max reinfection probability of 60% for now)
+- **Status**: Did this, but could be better. 
 - **Task**:
-  - [ ] Still don't know what to do with this yet
+  - [ ] ~~Still don't know what to do with this yet~~
+  - [ ] could change equation used to model disease tolerance/resillience better
 ### 4. Improving Random walks
 - **Description**: Random walks is still primitive need to be improve
 - **Status**:Open
