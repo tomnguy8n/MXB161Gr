@@ -10,5 +10,5 @@
 ### ImprovedVer_addedResistance:
 * moved axis equals up so graph doesn't wiggle
 * removed immunity period (recovered agents stay in 'recovered' state) - changed to a step counter for recovered agents
-* added resistance for recovered agents based on an S curve - currently they have a max of 60% chance of reinfection, which decreases by 0.75 each time they get infected again. Their infection probability increases with time (immunity reduces).
+* added resistance for recovered agents based on an S curve - currently they have a max of 60% chance of reinfection, which decreases by 0.75 each time they get infected again. Their reinfection probability increases with time (immunity reduces).
 (Could look at disease tolerance/resillience models for better equation)
