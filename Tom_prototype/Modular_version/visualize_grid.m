@@ -29,6 +29,8 @@ function visualize_grid(agentPositions, agentStates, gridSize, step, visualizati
         subplot(1, 2, 1);
         cla;
         hold on;
+        axis equal;
+        axis([1 gridSize 1 gridSize]);
         plot(agentPositions(agentStates == 0, 1), agentPositions(agentStates == 0, 2), 'go'); % Susceptible: Green
         plot(agentPositions(agentStates == 1, 1), agentPositions(agentStates == 1, 2), 'ro'); % Infected: Red
         plot(agentPositions(agentStates == 2, 1), agentPositions(agentStates == 2, 2), 'bo'); % Recovered: Blue
