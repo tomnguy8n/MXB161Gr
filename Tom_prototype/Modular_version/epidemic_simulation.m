@@ -1,9 +1,10 @@
-function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDuration, p0, nSteps, videoFile, neighborhoodType, infectionRadius, visualizationType)
+function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDuration, p0, nSteps, videoFile, neighborhoodType, infectionRadius, visualizationType, reinfectionProbBase)
     % Initialize positions and states
     agentPositions = ceil(rand(nAgents, 2) * gridSize);
     agentStates = zeros(nAgents, 1); % 0 = Susceptible, 1 = Infected, 2 = Recovered
     agentInfectionTime = zeros(nAgents, 1); % Track infection duration
     agentImmunityTime = zeros(nAgents, 1); % Track immunity duration
+    agentRecoveries = zeros(nAgents, 1); % Track number of recoveries
     
     % Initialize some agents as infected
     initiallyInfected = randperm(nAgents, 5);
@@ -50,13 +51,13 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
     % Simulation loop
     for step = 1:nSteps
         % Update infection time and states
-        [agentStates, agentInfectionTime, agentImmunityTime] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration);
+        [agentStates, agentInfectionTime, agentImmunityTime, agentRecoveries] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration, agentRecoveries);
         
         % Random walk: move agents to new positions
         agentPositions = random_walk(agentPositions, gridSize);
         
         % Infection process using specified neighborhood
-        [newStates, newInfectionTime] = infection_process(agentStates, agentPositions, gridSize, p0, infectionRadius, neighborhoodType, infectionDuration);
+        [newStates, newInfectionTime] = infection_process(agentStates, agentPositions, gridSize, p0, infectionRadius, neighborhoodType, infectionDuration, agentRecoveries, reinfectionProbBase);
         
         % Update agent states and infection times
         agentStates = newStates;
