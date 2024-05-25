@@ -13,3 +13,9 @@
 * added resistance for recovered agents based on an S curve (equation: p_reinfection = 0.3tanh(0.08(steps)-2)+0.3) - currently they initially have a max of 40%-60% chance of reinfection (ie when immunity wears off after ~65 steps), which decreases by 0.75 each time they get infected again.
 * their reinfection probability increases with time (immunity reduces).
 * every agent has a random 'reinfection immunity' (currently from 40%-60% max chance of reinfection)
+
+### Modular_ver:
+* implement multiple choice for neighborhood
+* implement multiple visualization techniques
+* implement a simpler version of immunity and resistance model after $1-(1-p)^x$ where p is the reinfection probability and reinfection probability is model after $p = (p1)^n * p0$ where p1 is how much the chance of reinfection is compare to the initial probability for example if reinfection effectiveness is 50% or 0.5 and the initial probability of infection is 20% then the reinfection probability is 10%. N is the number of recoveries the agent has gone through
+* every time an agent heal its immunity time after it recover is increase by 1 steps
