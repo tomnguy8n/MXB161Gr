@@ -1,4 +1,4 @@
-function [agentStates, agentInfectionTime, agentImmunityTime] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration)
+function [agentStates, agentInfectionTime, agentImmunityTime, agentRecoveries] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration, agentRecoveries)
     % Update infection time and states using logical indexing
     infected_agents = (agentStates == 1);
     agentInfectionTime(infected_agents) = agentInfectionTime(infected_agents) - 1;
@@ -6,7 +6,8 @@ function [agentStates, agentInfectionTime, agentImmunityTime] = update_states(ag
     
     % Update states of recovered agents to recovered
     agentStates(recovered_agents) = 2;
-    agentImmunityTime(recovered_agents) = immunityDuration;
+    agentRecoveries(recovered_agents) = agentRecoveries(recovered_agents) + 1; % Increment recovery count
+    agentImmunityTime(recovered_agents) = immunityDuration + agentRecoveries(recovered_agents); % Increase immunity duration after each recovery
     
     % Update immunity time and states for recovered agents
     recovered_agents = (agentStates == 2);
