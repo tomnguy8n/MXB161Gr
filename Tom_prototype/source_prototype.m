@@ -12,7 +12,7 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
     agentInfectionTime(initiallyInfected) = infectionDuration;
     
     % Set up video writer
-    writer = VideoWriter(videoFile, 'Uncompressed AVI');
+    writer = VideoWriter(videoFile);
     open(writer);
     
     % Initialize arrays to track counts
