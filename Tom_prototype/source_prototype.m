@@ -137,6 +137,11 @@ function nSurrounding = count_infected_neighbors(currentPos, agentPositions, age
                 if abs(surrounding_x) + abs(surrounding_y) > infectionRadius || (surrounding_x == 0 && surrounding_y == 0)
                     continue;
                 end
+            elseif strcmp(neighborhoodType, 'Euclidean')
+                distance = sqrt(surrounding_x^2 + surrounding_y^2);
+                if distance > infectionRadius || distance == 0
+                    continue;
+                end
             else
                 error('Invalid neighborhood type');
             end
