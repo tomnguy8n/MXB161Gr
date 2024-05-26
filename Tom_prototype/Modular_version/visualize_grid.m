@@ -10,8 +10,10 @@ function visualize_grid(agentPositions, agentStates, gridSize, step, visualizati
                 color = 'g'; % Susceptible: Green
             elseif agentStates(i) == 1
                 color = 'r'; % Infected: Red
-            else
+            elseif agentStates(i) == 2
                 color = 'b'; % Recovered: Blue
+            else
+                color = 'k'; % Dead: Black
             end
             rectangle('Position', [agentPositions(i,1), agentPositions(i,2), 1, 1], 'FaceColor', color, 'EdgeColor', color, 'LineWidth', 1.5);
         end
@@ -29,11 +31,11 @@ function visualize_grid(agentPositions, agentStates, gridSize, step, visualizati
         subplot(1, 2, 1);
         cla;
         hold on;
-        axis equal;
-        axis([1 gridSize 1 gridSize]);
         plot(agentPositions(agentStates == 0, 1), agentPositions(agentStates == 0, 2), 'go'); % Susceptible: Green
         plot(agentPositions(agentStates == 1, 1), agentPositions(agentStates == 1, 2), 'ro'); % Infected: Red
         plot(agentPositions(agentStates == 2, 1), agentPositions(agentStates == 2, 2), 'bo'); % Recovered: Blue
+        plot(agentPositions(agentStates == 3, 1), agentPositions(agentStates == 3, 2), 'ko'); % Dead: Black
+        axis([1 gridSize 1 gridSize]);
         hold off;
         title(sprintf('Step %d', step));
     end
