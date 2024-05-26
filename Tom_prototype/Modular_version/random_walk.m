@@ -1,6 +1,8 @@
-function agentPositions = random_walk(agentPositions, gridSize)
+function agentPositions = random_walk(agentPositions, gridSize, agentStates)
+    % Only move agents that are not dead
+    alive_agents = agentStates ~= 3; % Find indices of agents that are not dead
+    
     % Random walk: move agents to new positions
-    nAgents = size(agentPositions, 1);
-    agentPositions = agentPositions + randi([-1, 1], nAgents, 2);
+    agentPositions(alive_agents, :) = agentPositions(alive_agents, :) + randi([-1, 1], sum(alive_agents), 2);
     agentPositions = max(min(agentPositions, gridSize), 1); % Keep within bounds
 end
