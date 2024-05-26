@@ -58,7 +58,7 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
         [agentStates, agentInfectionTime, agentImmunityTime, agentRecoveries] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration, agentRecoveries, deathProbBase);
         
         % Random walk: move agents to new positions
-        agentPositions = random_walk(agentPositions, gridSize);
+        agentPositions = random_walk(agentPositions, gridSize, agentStates);
         
         % Infection process using specified neighborhood
         [newStates, newInfectionTime] = infection_process(agentStates, agentPositions, gridSize, p0, infectionRadius, neighborhoodType, infectionDuration, agentRecoveries, reinfectionProbBase);
@@ -158,10 +158,12 @@ function nSurrounding = count_infected_neighbors(currentPos, agentPositions, age
     end
 end
 
-function agentPositions = random_walk(agentPositions, gridSize)
+function agentPositions = random_walk(agentPositions, gridSize, agentStates)
+    % Only move agents that are not dead
+    alive_agents = agentStates ~= 3; % Find indices of agents that are not dead
+    
     % Random walk: move agents to new positions
-    nAgents = size(agentPositions, 1);
-    agentPositions = agentPositions + randi([-1, 1], nAgents, 2);
+    agentPositions(alive_agents, :) = agentPositions(alive_agents, :) + randi([-1, 1], sum(alive_agents), 2);
     agentPositions = max(min(agentPositions, gridSize), 1); % Keep within bounds
 end
 
