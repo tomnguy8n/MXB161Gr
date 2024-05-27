@@ -58,7 +58,7 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
         [agentStates, agentInfectionTime, agentImmunityTime, agentRecoveries] = update_states(agentStates, agentInfectionTime, agentImmunityTime, infectionDuration, immunityDuration, agentRecoveries, deathProbBase);
         
         % Random walk: move agents to new positions
-        agentPositions = random_walk(agentPositions, gridSize agentStates);
+        agentPositions = random_walk(agentPositions, gridSize, agentStates);
         
         % Infection process using specified neighborhood
         [newStates, newInfectionTime] = infection_process(agentStates, agentPositions, gridSize, p0, infectionRadius, neighborhoodType, infectionDuration, agentRecoveries, reinfectionProbBase);
