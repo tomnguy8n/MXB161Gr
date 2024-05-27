@@ -28,6 +28,7 @@
 - **Status**:Open
 - **Task**:
   - [ ] possible implementation: bias random walks, random walks on already define pattern, corelated random walks ??
+        Actually, drifting towards an epicentre is really easy but maybe not worth it since it'll slow down the execution time with all the if statements compared to Tom's current one line version. 
   - [ ] implement a path tracer for 1 particle to check if needed
   - [ ] implementation time
   - [ ] compare to human trajectory in some closed space ?
