@@ -13,6 +13,7 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
     
     % Set up video writer
     writer = VideoWriter(videoFile);
+    writer.FrameRate = 10;
     open(writer);
     
     % Initialize arrays to track counts
