@@ -22,10 +22,6 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
     recovered_counts = zeros(nSteps, 1);
     dead_counts = zeros(nSteps, 1); % Current number of dead individuals
     
-    % Array to track agent states and positions over time
-    agentStatesHistory = zeros(nAgents, nSteps);
-    agentPositionsHistory = zeros(nAgents, 2, nSteps);
-    
     % Get screen size and adjust figure size dynamically
     screenSize = get(0, 'ScreenSize');
     figWidth = screenSize(3) - 200;
@@ -67,10 +63,6 @@ function epidemic_simulation(gridSize, nAgents, infectionDuration, immunityDurat
         % Update agent states and infection times
         agentStates = newStates;
         agentInfectionTime = max(agentInfectionTime, newInfectionTime); % Ensure new infection times are considered
-        
-        % Store agent states and positions in history
-        agentStatesHistory(:, step) = agentStates;
-        agentPositionsHistory(:, :, step) = agentPositions;
         
         % Plotting for the Cellular Automata Graph
         visualize_grid(agentPositions, agentStates, gridSize, step, visualizationType);
